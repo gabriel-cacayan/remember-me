@@ -1,63 +1,36 @@
 <template>
   <TheHeader />
+  <nav class="flex space-x-4 bg-blue-300 p-4">
+    <router-link to="/stored-resources" class="p-4 font-semibold"
+      >Stored Resources</router-link
+    >
+    <router-link to="/add-resource" class="p-4 font-semibold"
+      >Add Resource</router-link
+    >
+  </nav>
 
-  <div
-    class="mt-10 rounded-lg shadow-md border border-gray-300 w-3/4 mx-auto p-4"
-  >
-    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-5">
-      <button
-        :class="{
-          'bg-blue-900 text-white p-4': activeTab === 'StoredResources',
-        }"
-        @click="activeComponent('StoredResources')"
-      >
-        Stored Resources
-      </button>
-      <button
-        :class="{ 'bg-blue-900 text-white p-4': activeTab === 'AddResource' }"
-        @click="activeComponent('AddResource')"
-      >
-        Add Resources
-      </button>
-      <!-- <button @click="loadResources">Load Resources</button> -->
-    </div>
-  </div>
-
-  <KeepAlive>
-    <component :is="activeTab"></component>
-  </KeepAlive>
+  <main>
+    <Transition name="fade">
+      <p v-if="isLoading" class="mt-4">Loading...</p>
+      <div v-else>
+        <router-view></router-view>
+      </div>
+    </Transition>
+  </main>
 </template>
 
 <script>
 import TheHeader from "./components/layout/TheHeader.vue";
-import StoredResources from "./components/StoredResources.vue";
-import AddResource from "./components/AddResource.vue";
 import { computed } from "vue";
 
 export default {
   components: {
     TheHeader,
-    StoredResources,
-    AddResource,
   },
   data() {
     return {
-      activeTab: "StoredResources",
-      // resources: [
-      //   {
-      //     title: "Youtube",
-      //     description:
-      //       "YouTube is a global online video sharing and social media platform headquartered in San Bruno, California. It was launched on February 14, 2005, by Steve Chen, Chad Hurley, and Jawed Karim. It is owned by Google, and is the second most visited website, after Google Search",
-      //     url: "https://www.youtube.com/",
-      //   },
-      //   {
-      //     title: "Twitter",
-      //     description:
-      //       'Twitter is an online social media and social networking service owned and operated by American company Twitter, Inc., on which users send and respond publicly or privately 280-character-long messages, images and videos known as "tweets".',
-      //     url: "https://twitter.com/",
-      //   },
-      // ],
       resources: [],
+      isLoading: null,
     };
   },
   provide() {
@@ -65,19 +38,12 @@ export default {
       resources: computed(() => this.resources),
       deleteTheResource: this.deleteTheResource,
       addToResource: this.addToResource,
+      // loadResources: this.loadResources,
+      isLoading: this.isLoading,
     };
   },
   methods: {
-    activeComponent: function (arg) {
-      this.activeTab = arg;
-    },
     addToResource: function (title, description, url) {
-      // const newResource = {
-      //   title: title,
-      //   description: description,
-      //   url: url,
-      // };
-
       fetch(
         "https://vue-remember-europe-default-rtdb.europe-west1.firebasedatabase.app/survey.json",
         {
@@ -109,6 +75,8 @@ export default {
             description: description,
             url: url,
           });
+
+          this.$router.push("/stored-resources");
         })
         .catch((error) => {
           console.error(`Whoops! Something went wrong: ${error}`);
@@ -131,12 +99,14 @@ export default {
           this.resources = this.resources.filter(
             (resource) => resource.id !== id
           );
+          this.$router.push("/stored-resources");
         })
         .catch((error) => {
           console.error(`Whoops! Something went wrong: ${error}`);
         });
     },
     loadResources: function () {
+      this.isLoading = true;
       fetch(
         "https://vue-remember-europe-default-rtdb.europe-west1.firebasedatabase.app/survey.json"
       )
@@ -157,6 +127,8 @@ export default {
               url: data[id].url,
             });
           }
+
+          this.isLoading = false;
         })
         .catch((error) => {
           console.error(`Whoops! Something went wrong: ${error}`);
@@ -166,6 +138,13 @@ export default {
   mounted() {
     this.loadResources();
   },
+  // watch: {
+  //   $route() {
+  //     if (this.$route.params.id) {
+  //       console.log(this.resources.length);
+  //     }
+  //   },
+  // },
 
   name: "App",
 };
@@ -179,5 +158,17 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-bottom: 60px;
+}
+
+/* we will explain what these classes do next! */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

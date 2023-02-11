@@ -10,25 +10,17 @@
     </h1>
 
     <p class="mt-4 text-left">{{ resource.description }}</p>
-    <div class="flex space-x-4">
-      <button
-        class="mt-4 h-10 px-6 font-semibold rounded-md bg-green-700 hover:bg-green-500 text-white"
-      >
-        <a :href="resource.url" target="_blank">View</a>
-      </button>
-      <button
-        class="mt-4 h-10 px-6 font-semibold rounded-md bg-red-700 hover:bg-red-500 text-white"
-        @click="deleteTheResource(resource.id)"
-      >
-        Delete
-      </button>
-    </div>
+    <router-link
+      :to="`/stored-resources/${resource.id}`"
+      class="mt-4 py-2 px-4 bg-green-700 hover:bg-green-500 text-white font-semibold"
+      >View</router-link
+    >
   </div>
 </template>
 
 <script>
 export default {
-  inject: ["resources", "deleteTheResource"],
+  inject: ["resources"],
   data() {
     return {
       storeResources: this.resources,

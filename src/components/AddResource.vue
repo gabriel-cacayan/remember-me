@@ -26,9 +26,7 @@
         placeholder="https://example.com"
         required
       />
-      <button
-        class="block mt-4 h-10 px-6 font-semibold rounded-md bg-blue-900 text-white"
-      >
+      <button class="block mt-4 h-10 px-6 font-semibold bg-blue-900 text-white">
         Submit
       </button>
     </form>
