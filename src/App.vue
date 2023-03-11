@@ -1,7 +1,7 @@
 <template>
   <TheHeader />
   <nav class="flex space-x-4 bg-blue-300 p-4">
-    <router-link to="/stored-resources" class="p-4 font-semibold"
+    <router-link :to="{ name: 'resources.index' }" class="p-4 font-semibold"
       >Stored Resources</router-link
     >
     <router-link to="/add-resource" class="p-4 font-semibold"
@@ -10,12 +10,11 @@
   </nav>
 
   <main>
-    <Transition name="fade">
-      <p v-if="isLoading" class="mt-4">Loading...</p>
-      <div v-else>
-        <router-view></router-view>
-      </div>
-    </Transition>
+    <p v-if="isLoading" class="mt-4">Loading...</p>
+
+    <div v-else>
+      <router-view></router-view>
+    </div>
   </main>
 </template>
 
@@ -138,13 +137,11 @@ export default {
   mounted() {
     this.loadResources();
   },
-  // watch: {
-  //   $route() {
-  //     if (this.$route.params.id) {
-  //       console.log(this.resources.length);
-  //     }
-  //   },
-  // },
+  created() {
+    if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+      window.location.replace("gabriel-cacayan.github.io/remember-me/");
+    }
+  },
 
   name: "App",
 };

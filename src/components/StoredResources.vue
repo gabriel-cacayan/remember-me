@@ -10,8 +10,13 @@
     </h1>
 
     <p class="mt-4 text-left">{{ resource.description }}</p>
-    <router-link
+    <!-- <router-link
       :to="`/stored-resources/${resource.id}`"
+      class="mt-4 py-2 px-4 bg-green-700 hover:bg-green-500 text-white font-semibold"
+      >View</router-link
+    > -->
+    <router-link
+      :to="{ name: 'resources.show', params: { id: resource.id } }"
       class="mt-4 py-2 px-4 bg-green-700 hover:bg-green-500 text-white font-semibold"
       >View</router-link
     >

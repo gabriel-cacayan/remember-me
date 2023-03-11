@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import StoredResources from "../src/components/StoredResources.vue";
 import AddResource from "../src/components/AddResource.vue";
 import TheResource from "../src/components/TheResource.vue";
+import NotFound from "./components/views/NotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,16 +19,21 @@ const router = createRouter({
     },
     {
       path: "/stored-resources",
+      name: "resources.index",
       component: StoredResources,
     },
     {
       path: "/stored-resources/:id",
+      name: "resources.show",
       component: TheResource,
-      props: true,
     },
     {
       path: "/add-resource",
       component: AddResource,
+    },
+    {
+      path: "/:catchAll(.*)",
+      component: NotFound,
     },
   ],
   linkActiveClass: "bg-purple-900 text-white",
