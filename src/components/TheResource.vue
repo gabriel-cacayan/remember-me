@@ -28,44 +28,7 @@
 </template>
 
 <script>
-export default {
-  inject: ["deleteTheResource", "resources", "isLoading"],
-  data() {
-    return {
-      storeResources: this.resources,
-      resource: {},
-      resourceIsLoading: this.isLoading,
-    };
-  },
-  methods: {
-    loadResource: function (route) {
-      this.resourceIsLoading = true;
-
-      const id = route.params.id;
-      if (this.resources.length === 0) {
-        this.loadResources();
-      }
-      const selectedResource = this.storeResources.find((r) => r.id == id);
-      this.resource = selectedResource;
-
-      this.resourceIsLoading = false;
-    },
-  },
-  created() {
-    this.loadResource(this.$route);
-  },
-};
+export default {};
 </script>
 
-<style scoped>
-/* we will explain what these classes do next! */
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>
+<style scoped></style>
